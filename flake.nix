@@ -14,24 +14,19 @@
 		devShells.${system}.default = 
 		pkgs.mkShell {
 			buildInputs = with pkgs; [
-				python312
 				poetry
 				manim
 
-				# libgccjit
-				# libgcc
-				# (python312.withPackages (python-pkgs: with python-pkgs; [
-				# 	pandas
-				# 	joblib
-				# 	jupyter
-				# 	numpy
-				# 	seaborn
-				# 	scipy
-				# 	matplotlib
-				# 	requests
-				# 	beautifulsoup4
-				#
-				# ]))
+				(python312.withPackages (python-pkgs: with python-pkgs; [
+					pandas
+					jupyter
+					numpy
+					seaborn
+					scipy
+					matplotlib
+					requests
+					beautifulsoup4
+				]))
 			];
 
 			LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib";
