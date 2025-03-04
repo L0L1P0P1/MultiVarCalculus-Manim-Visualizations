@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "r3-lines-and-planes"
+version = "0.1.0"
+description = ""
+authors = ["L0L1P0P1 <behradbadeli@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "^2.2.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
