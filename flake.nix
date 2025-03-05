@@ -8,13 +8,13 @@
 	outputs = { self, nixpkgs, ... }: 
 	let
 		system = "x86_64-linux";
-		pkgs = nixpkgs.legacyPackages.${system};
+		pkgs = import nixpkgs {system = "x86_64-linux"; config.allowBroken=true;};
 	in
 	{
 		devShells.${system}.default = 
 		pkgs.mkShell {
+			allowBroken = true;
 			buildInputs = with pkgs; [
-				poetry
 				manim
 
 				(python312.withPackages (python-pkgs: with python-pkgs; [
@@ -31,7 +31,7 @@
 
 			LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib";
 			shellHook = ''
-				zsh
+				zsh 
 				'';
 		};
 	};
