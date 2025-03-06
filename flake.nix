@@ -16,22 +16,27 @@
 			allowBroken = true;
 			buildInputs = with pkgs; [
 				manim
+				ffmpeg
+				libGL
 
 				(python312.withPackages (python-pkgs: with python-pkgs; [
 					pandas
+					glcontext
 					jupyter
 					numpy
 					seaborn
 					scipy
+					manimpango
 					matplotlib
 					requests
 					beautifulsoup4
 				]))
 			];
 
-			LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib";
+			# LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib";
+			LD_LIBRARY_PATH="${pkgs.libGL}/lib";
 			shellHook = ''
-				zsh 
+				zsh -c "source ~/Dev/manimvenv/bin/activate; zsh" 
 				'';
 		};
 	};
