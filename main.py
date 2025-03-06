@@ -15,8 +15,8 @@ class skewLines(ThreeDScene):
         
         # l1 = Line3D(start=(c*(p1 - t*v1)), end=(c*(p1 + t*v1)), color=RED, stroke_color=RED)
         # l2 = Line3D(start=(c*(p2 + t*v2)), end=(c*(p2 - t*v2)), color=GREEN, stroke_color=GREEN)
-        l1 = Line3D(start=(c*(p1 - t*v1)), end=(c*(p1 + t*v1)))
-        l2 = Line3D(start=(c*(p2 + t*v2)), end=(c*(p2 - t*v2)))
+        # l1 = Line3D(start=(c*(p1 - t*v1)), end=(c*(p1 + t*v1)))
+        # l2 = Line3D(start=(c*(p2 + t*v2)), end=(c*(p2 - t*v2)))
 
         self.set_camera_orientation(phi=0 * DEGREES, theta= -90 * DEGREES)
 

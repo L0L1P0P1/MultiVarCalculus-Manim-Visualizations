@@ -16,6 +16,9 @@
 			allowBroken = true;
 			buildInputs = with pkgs; [
 				manim
+				pango
+				ffmpeg
+				libGL
 
 				(python312.withPackages (python-pkgs: with python-pkgs; [
 					pandas
@@ -29,7 +32,7 @@
 				]))
 			];
 
-			LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib";
+			LD_LIBRARY_PATH="${pkgs.libGL}/lib";
 			shellHook = ''
 				zsh 
 				'';
