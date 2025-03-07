@@ -105,7 +105,8 @@ class skewLines(ThreeDScene):
                                   as the normal vector for two parallel planes \\ 
                                   which each include the lines $\mathit{l}_{1}$ and $\mathit{l}_{2}$
                                   """, font_size=24).fix_in_frame()
-        self.play(Write(cross_prod_text))
+        self.play(Write(cross_prod_text), run_time=3)
+        self.wait(2)
         self.play(cross_prod_text.animate.to_corner(UP))
         cross_prod = VGroup(
                 Tex(R"\vec{v}_1 \times \vec{v}_2").fix_in_frame(), 
@@ -156,11 +157,35 @@ class skewLines(ThreeDScene):
         self.play(FadeOut(normalvec3D), FadeOut(planes), FadeOut(linegroupre), FadeOut(number_plane))
         
 
-        objective3 = TexText(R"Find the distance between $l_1$ and $l_2%").fix_in_frame()
+        objective3 = TexText(R"Find the distance between $l_1$ and $l_2$").fix_in_frame().move_to(UP)
         self.play(Write(objective3), run_time=2)
-
-
+        self.wait(1)
+        self.play(objective3.animate.scale(0.4).to_corner(UR))
+        self.wait(0.5)
+        distancetext = TexText(R"""
+                               The distance $|d|$ between two lines can be defined as \\
+                                the lenghth of the projection of a vector ($\vec{r}_2 - \vec{r}_1$) \\ where $\vec{r}_1$ and $\vec{r}_2$
+                                are position vectors on \\ the lines $\mathit{l}_{1}$ and $\mathit{l}_{2}$ on $\vec{n}$:
+                               """, font_size=24).fix_in_frame()
+        self.play(Write(distancetext), run_time = 3)
+        self.wait(2)
+        self.play(distancetext.animate.to_corner(UP))
+        distance_eq = VGroup(
+                Tex(R"|d|= |\text{proj}_{\vec{n}} (\vec{r}_2 - \vec{r}_1)|").fix_in_frame(),
+                Tex(R"|\text{proj}_{\vec{n}} (\vec{r}_2 - \vec{r}_1)| = |\frac{\vec{n}.(\vec{r}_2 - \vec{r}_1)}{\vec{n}}|").fix_in_frame(),
+                )
+        self.play(Write(distance_eq[0]))
+        self.wait(waitbetweeneq)
+        self.play(TransformMatchingParts(distance_eq[0],distance_eq[1]))
+        self.wait(3)
+        self.play(distance_eq[1].animate.scale(0.35).next_to(cross_prod[2],DOWN), FadeIn(planes), FadeIn(linegroupre), FadeIn(number_plane))
+        self.wait(1)
+        l = np.dot((p2-p1),-n)/np.linalg.norm(n)
+        linesforproj = Group(Line3D(start=(c*(p2 + t*v2)), end=(c*(p1 + t*v1))), Line3D(start=p2, end=v2*l))
+        self.play(ShowCreation(linesforproj))
+        self.wait(1)
+        self.play(self.frame.animate.reorient(phi_degrees=80, theta_degrees=-105, center=[0,0,3.5]), run_time=2)
+        self.wait(3)
+        raise EndScene()
         
-
-
 
