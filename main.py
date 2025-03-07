@@ -2,8 +2,19 @@ from manimlib import *
 import numpy as np
 
 class skewLines(ThreeDScene):
+    def plane_eq(self, u, v, n, p):
+        c = n[2] 
+        # Avoid division by zero
+        if abs(c) < 1e-10:
+            c = 1e-10
+        x = u
+        y = v
+        z = (-n[0]*x - n[1]*y + np.dot(n, p)) / c
+        
+        return np.array([x, y, z])
+
     def construct(self):
-        self.camera.light_source = Point((0,0,0))
+        self.camera.light_source = Point((100,100,100))
         self.camera.fps = 60
         self.frame.set_field_of_view(70)
         self.frame.reorient(phi_degrees=0, theta_degrees= -90, center=(0,0,2)) # Axes and NumberPlane
@@ -22,9 +33,12 @@ class skewLines(ThreeDScene):
         self.wait(0.5)
         self.play(objective1.animate.scale(0.5).to_corner(UR))
         self.bring_to_front(objective1)
-        eq_text = TexText(R"Vector equations for lines $\mathit{l}_{1}$ and $\mathit{l}_{2}$:", font_size=32).fix_in_frame().shift(UP)
+        eq_text = TexText(R"""
+                          Vector equations for lines $\mathit{l}_{1}$ and $\mathit{l}_{2}$ \\
+                          where $\vec{v}_1 \nparallel \vec{v}_2$: \\ \ 
+                          """, font_size=32).fix_in_frame().move_to(UP)
         self.play(FadeIn(eq_text), run_time=0.5)
-        line_eq = Tex(R"\begin{cases} \mathit{l}_{1}: r_1 + t \  \vec{v}_1 \\ \mathit{l}_2: r_2+s \ \vec{v}_2 \end{cases}", font_size=48, isolate=[R"\vec{v}_2", R"\vec{v}_1"]).fix_in_frame()
+        line_eq = Tex(R"\begin{cases} \mathit{l}_{1}: r_1 + t \  \vec{v}_1 \\ \mathit{l}_2: r_2+s \ \vec{v}_2 \end{cases}", font_size=48, isolate=[R"\vec{v}_2", R"\vec{v}_1"]).fix_in_frame().next_to(eq_text, DOWN)
         self.play(Write(line_eq), run_time=2)
         self.play(FadeOut(eq_text), run_time=0.5)
         self.play(line_eq.animate.scale(0.5).to_corner(UL))
@@ -43,7 +57,7 @@ class skewLines(ThreeDScene):
         v2 = np.array([-1,2,-1])
         p1 = np.array([0,0,4])
         p2 = np.array([0,0,2])
-        t = 20
+        t = 50
         c = 1
         # Lines
         l1 = Line3D(start=(c*(p1 - t*v1)), end=(c*(p1 + t*v1)), color=RED, width=0.05)
@@ -79,3 +93,20 @@ class skewLines(ThreeDScene):
         self.play(cross_prod[2].animate.scale(0.5).next_to(line_eq,DOWN))
 
         self.play(FadeIn(axes), FadeIn(number_plane), FadeIn(linegroup))
+
+        normal_vec = np.cross(v1,v2)
+
+        plane1 = ParametricSurface(
+                    lambda u, v: self.plane_eq(u,v,normal_vec, p1),
+                    u_range=(-5,5),
+                    v_range=(-5,5),
+                )
+        self.add(plane1)
+        self.wait(2)
+
+
+        
+
+
+
+
