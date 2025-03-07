@@ -15,7 +15,6 @@
 		pkgs.mkShell {
 			allowBroken = true;
 			buildInputs = with pkgs; [
-				manim
 				ffmpeg
 				libGL
 
