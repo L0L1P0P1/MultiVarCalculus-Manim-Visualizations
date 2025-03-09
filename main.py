@@ -146,7 +146,7 @@ class skewLines(ThreeDScene):
                     lambda u, v: self.plane_eq(u,v,n,p2),
                     u_range=(-surface_size,surface_size),
                     v_range=(-surface_size,surface_size),
-                    color=GREEN
+                    color=GREEN,
                 )
         planes = Group(plane1, plane2)
         self.play(ShowCreation(planes))
@@ -174,18 +174,38 @@ class skewLines(ThreeDScene):
                 Tex(R"|d|= |\text{proj}_{\vec{n}} (\vec{r}_2 - \vec{r}_1)|").fix_in_frame(),
                 Tex(R"|\text{proj}_{\vec{n}} (\vec{r}_2 - \vec{r}_1)| = |\frac{\vec{n}.(\vec{r}_2 - \vec{r}_1)}{\vec{n}}|").fix_in_frame(),
                 )
+        distance_plane_text = TexText(R"Notice that the distance between these lines \\ is the same as the distance of the \\ two parallel planes containing them.", font_size=22).fix_in_frame().to_corner(UP)
         self.play(Write(distance_eq[0]))
         self.wait(waitbetweeneq)
         self.play(TransformMatchingParts(distance_eq[0],distance_eq[1]))
         self.wait(3)
         self.play(distance_eq[1].animate.scale(0.35).next_to(cross_prod[2],DOWN), FadeIn(planes), FadeIn(linegroupre), FadeIn(number_plane))
         self.wait(1)
-        l = np.dot((p2-p1),-n)/np.linalg.norm(n)
-        linesforproj = Group(Line3D(start=(c*(p2 + t*v2)), end=(c*(p1 + t*v1))), Line3D(start=p2, end=v2*l))
+        l = np.dot((p1-p2),n)/np.linalg.norm(n)
+        dline_verticies = np.array([(p1+-l*n/np.linalg.norm(n)),p1])
+        linesforproj = Group(Line3D(start=(c*(p2 + t*v2)), end=(c*(p1 + t*v1)), color = PURPLE_B), Line3D(start=dline_verticies[0], end=dline_verticies[1], color=YELLOW))
         self.play(ShowCreation(linesforproj))
         self.wait(1)
-        self.play(self.frame.animate.reorient(phi_degrees=80, theta_degrees=-105, center=[0,0,3.5]), run_time=2)
+        self.play(self.frame.animate.reorient(phi_degrees=80, theta_degrees=-105, center=[0,0,3.5]), FadeOut(distancetext), FadeOut(objective3), run_time=2)
+        self.wait(2)
+        self.play(Transform(linesforproj[0], linesforproj[1]))
+        self.wait(2)
+        self.remove(linesforproj[0])
+        self.play(Write(distance_plane_text))
+        self.play(linesforproj[1].animate.put_start_and_end_on(dline_verticies[0]+v1*0.5, dline_verticies[1]+v1*0.5), run_time=2)
+        self.play(linesforproj[1].animate.put_start_and_end_on(dline_verticies[0]+v1*-0.5, dline_verticies[1]+v1*-0.5), run_time=3)
+        self.play(linesforproj[1].animate.put_start_and_end_on(dline_verticies[0], dline_verticies[1]), run_time=2)
         self.wait(3)
-        raise EndScene()
-        
+        self.play(FadeOut(number_plane),  FadeOut(planes), FadeOut(line_eq), FadeOut(distance_eq[1]), FadeOut(cross_prod[2]), FadeOut(linesforproj[1]), FadeOut(distance_plane_text))
+        self.wait(1)
+        self.play(FadeOut(linegroupre))
+
+        contributers = TexText(R"A Group Project By: \\ Ali Yazdi \\ Sama Zohari \\ Helya Kamyab \\ Roham Nodust \\ Behard Badeli ", font_size=22).fix_in_frame().to_corner(LEFT)
+        prof = TexText(R"Guided by: Prof. Akbari", font_size=22).fix_in_frame().to_corner(RIGHT)
+        manim = Text("Made with Manim").fix_in_frame()
+
+        self.play(Write(contributers), Write(prof), Write(manim), run_time = 4, lag_ratio=1)
+        self.wait(5)
+
+        raise EndScene() 
 
